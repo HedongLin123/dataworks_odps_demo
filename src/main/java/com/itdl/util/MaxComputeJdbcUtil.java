@@ -1,8 +1,7 @@
 package com.itdl.util;
 
 import com.alibaba.fastjson.JSONObject;
-import com.aliyun.odps.Instance;
-import com.aliyun.odps.OdpsException;
+import com.aliyun.odps.*;
 import com.aliyun.odps.data.Record;
 import com.aliyun.odps.task.SQLTask;
 import com.itdl.common.base.PageResult;
@@ -13,6 +12,7 @@ import com.itdl.common.exception.BizException;
 import com.itdl.conn.param.MaxComputeJdbcConnParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.sql.*;
 import java.util.*;
@@ -306,6 +306,9 @@ public class MaxComputeJdbcUtil {
         }
         return new PageResult<>(result.getTotal(), rows);
     }
+
+
+
 
 
     /**

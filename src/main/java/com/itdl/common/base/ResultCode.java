@@ -18,6 +18,8 @@ public enum ResultCode implements BaseEnums<String, String> {
     MAX_COMPUTE_PWD_ERR("TEST-000004", "MaxCompute 密码错误"),
     MAX_COMPUTE_SQL_EXEC_ERR("TEST-000005", "MaxCompute SQL执行出错"),
     MAX_COMPUTE_JDBC_DRIVE_LOAD_ERR("TEST-000006", "MaxCompute JDBC驱动加载失败"),
+    DATA_WORKS_ENDPOINT_ERR("TEST-000007", "DataWorks API地址错误"),
+    DATA_WORKS_ENGINE_SUPPORT_ERR("TEST-000008", "DataWorks 引擎目前只支持ODPS"),
     SYSTEM_INNER_ERR("TEST-100000", "系统内部错误"),
     ;
 

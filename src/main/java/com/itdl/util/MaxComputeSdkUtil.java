@@ -234,6 +234,70 @@ public class MaxComputeSdkUtil {
 
 
     /**
+     * 根据表名获取建表语句
+     * @param tableName 表名
+     * @return
+     */
+    public String getSqlCreateDesc(String tableName) {
+        final Table table = odps.tables().get(tableName);
+        // 建表语句
+        StringBuilder mssqlDDL = new StringBuilder();
+
+        // 获取表结构
+        TableSchema tableSchema = table.getSchema();
+        // 获取表名表注释
+        String tableComment = table.getComment();
+
+        //获取列名列注释
+        List<Column> columns = tableSchema.getColumns();
+        /*组装成mssql的DDL*/
+        // 表名
+        mssqlDDL.append("CREATE TABLE IF NOT EXISTS ");
+        mssqlDDL.append(tableName).append("\n");
+        mssqlDDL.append(" (\n");
+        //列字段
+        int index = 1;
+        for (Column column : columns) {
+            mssqlDDL.append("  ").append(column.getName()).append("\t\t").append(column.getTypeInfo().getTypeName());
+            if (!ObjectUtils.isEmpty(column.getComment())) {
+                mssqlDDL.append(" COMMENT '").append(column.getComment()).append("'");
+            }
+            if (index == columns.size()) {
+                mssqlDDL.append("\n");
+            } else {
+                mssqlDDL.append(",\n");
+            }
+            index++;
+        }
+        mssqlDDL.append(" )\n");
+        //获取分区
+        List<Column> partitionColumns = tableSchema.getPartitionColumns();
+        int partitionIndex = 1;
+        if (!ObjectUtils.isEmpty(partitionColumns)) {
+            mssqlDDL.append("PARTITIONED BY (");
+        }
+        for (Column partitionColumn : partitionColumns) {
+            final String format = String.format("%s %s COMMENT '%s'", partitionColumn.getName(), partitionColumn.getTypeInfo().getTypeName(), partitionColumn.getComment());
+            mssqlDDL.append(format);
+            if (partitionIndex == partitionColumns.size()) {
+                mssqlDDL.append("\n");
+            } else {
+                mssqlDDL.append(",\n");
+            }
+            partitionIndex++;
+        }
+
+        if (!ObjectUtils.isEmpty(partitionColumns)) {
+            mssqlDDL.append(")\n");
+        }
+//        mssqlDDL.append("STORED AS ALIORC  \n");
+//        mssqlDDL.append("TBLPROPERTIES ('comment'='").append(tableComment).append("');");
+        mssqlDDL.append(";");
+        return mssqlDDL.toString();
+    }
+
+
+    /**
      * 开启和移除全表扫描配置
      * @param fullScan 是否全表扫描
      */
